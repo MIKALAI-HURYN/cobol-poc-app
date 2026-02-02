@@ -1,0 +1,70 @@
+h1. AccountTransactions — Account Transaction Ledger (Target)
+
+h2. What this table is for
+
+AccountTransactions stores the transformed transaction-level output for accounts. It is intended to hold one row per posted/processed transaction event, enriched with account and customer identifiers, descriptive context, and operational processing metadata.
+
+This table is typically populated from inbound transaction feeds and/or transformation jobs that join transaction activity to the account master (for example, using AccountID and/or AccountNumber).
+
+h2. Grain (what one row represents)
+
+Each row represents a single transaction event associated with a specific account and customer. The unique row identifier is TransactionID.
+
+h2. How records are identified and linked
+
+Internal identity:
+
+TransactionID is the system-generated identifier for each transaction record.
+Links back to the account master:
+
+AccountID identifies the account using the internal integer key.
+AccountNumber carries the business-facing account identifier.
+CustomerID links the transaction back to the owning customer.
+There is no explicit foreign key in the DDL, but these fields are designed to support joins to the account master and customer master.
+
+h2. Column descriptions (free format, metadata-friendly)
+
+TransactionID is a required BIGINT generated automatically (AUTO_INCREMENT). It is the primary key for this table and uniquely identifies a transaction row.
+
+AccountID is a required INT identifying which account the transaction belongs to. This field is indexed and is expected to be the primary join key to the account master table.
+
+CustomerID is a required INT identifying the customer associated with the transaction. This field is indexed to support customer-centric retrieval and reporting.
+
+AccountNumber is a required VARCHAR(20) containing the business account number associated with the transaction. It supports lookups and reconciliation where business identifiers are used.
+
+Description is a VARCHAR(200) (optional) holding a human-readable transaction description (for example, “ATM Withdrawal”, “Salary Deposit”, “Fee Charge”). The content is not constrained by the DDL.
+
+TransactionSubType is a VARCHAR(30) (optional) intended for additional classification beyond the description (for example, channel-specific or product-specific subtype labels). The content is not constrained by the DDL.
+
+Amount is a DECIMAL(15,2) with a default of 0.00. It represents the transaction amount. Sign conventions (debit negative vs credit positive, or vice versa) should be defined by business rules for the pipeline that populates this table.
+
+RunningBalance is a DECIMAL(15,2) with a default of 0.00. It represents the balance after applying this transaction in sequence. Whether this is computed during ingestion, during reconciliation, or during downstream processing depends on the application flow.
+
+BranchCode is a VARCHAR(10) (optional) capturing branch/location context for the transaction. It supports branch reporting and can align with the branch code stored on the account master.
+
+ReferenceNumber is a VARCHAR(50) (optional) used to store an external reference or trace identifier (for example, a payment reference, switch reference, file reference, or message ID). It is indexed to support fast trace/search workflows.
+
+Channel is a VARCHAR(30) with a default of 'Manual'. It represents how the transaction was initiated or captured (for example, Manual, ATM, Online, POS, Mobile). The allowed values are not constrained by the DDL, so channel normalization should be handled by upstream logic.
+
+TransactionDate is a TIMESTAMP with a default of CURRENT_TIMESTAMP. It represents the transaction timestamp (or ingestion timestamp, depending on the pipeline’s definition). Clarify whether this is “event time” or “load time” for consistent analytics.
+
+ProcessingStatus is a VARCHAR(20) with a default of 'PENDING'. It represents the operational status of processing for this record (for example, PENDING, PROCESSED, FAILED, REJECTED). The DDL does not restrict values, but the field is indexed and expected to be used for work queues and monitoring.
+
+CreatedTimestamp is a TIMESTAMP with a default of CURRENT_TIMESTAMP. It represents when the record was created in this table (load/audit timestamp).
+
+h2. Indexing and expected query patterns
+
+Optimized access patterns include:
+
+retrieving transactions for an account using AccountID (index: IDX_AccountTrans_Account)
+retrieving transactions for a customer using CustomerID (index: IDX_AccountTrans_Customer)
+filtering/reporting by time using TransactionDate (index: IDX_AccountTrans_Date)
+operational selection and monitoring using ProcessingStatus (index: IDX_AccountTrans_Status)
+tracing and investigation using ReferenceNumber (index: IDX_AccountTrans_RefNum)
+channel-based reporting using Channel (index: IDX_AccountTrans_Channel)
+h2. Operational and data quality notes
+
+Amount and RunningBalance defaults of 0.00 mean missing values can appear as zero; upstream should ensure real transaction amounts are set explicitly.
+ProcessingStatus defaults to 'PENDING', so ingestion pipelines should update status as part of processing.
+If both AccountID and AccountNumber are present, the pipeline should ensure they are consistent with each other (same account).
+Consider defining and enforcing domain values for ProcessingStatus and Channel at the application level if consistent reporting is required.
