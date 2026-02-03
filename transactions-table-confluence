@@ -74,3 +74,9 @@ Our dataset consist of:
 1. S3 bucket with name om-poc-s3 hosted in AWS owner Data team
 2. MySQL table with name poc-mysql hosted in AWS as an Aurora owner Data team, connection url located in parameter store /dev/aurora/poc-mysql/connection-url
 3. RabbitMQ with name RabbitMQ hosted in AWS owner Data team
+4. MySQL source table CustomerAccounts in poc-mysql.default.banking schema owner Data team
+5. MySQL target table AccountTransactions in poc-mysql.default.bank schema owner Data team
+6. COBOL transformation program ACCTXFRM (Account Transformation) owner Development team
+7. JCL job ACCTXFRM.jcl for batch execution owner Operations team
+8. S3 dataset transactions in om-poc-s3 bucket owner Data team
+9. AWS Parameter Store for connection credentials /dev/aurora/poc-mysql/connection-url owner Security team
