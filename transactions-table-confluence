@@ -68,3 +68,9 @@ Amount and RunningBalance defaults of 0.00 mean missing values can appear as zer
 ProcessingStatus defaults to 'PENDING', so ingestion pipelines should update status as part of processing.
 If both AccountID and AccountNumber are present, the pipeline should ensure they are consistent with each other (same account).
 Consider defining and enforcing domain values for ProcessingStatus and Channel at the application level if consistent reporting is required.
+
+Our dataset consist of:
+
+1. S3 bucket with name om-poc-s3 hosted in AWS owner Data team
+2. MySQL table with name poc-mysql hosted in AWS as an Aurora owner Data team, connection url located in parameter store /dev/aurora/poc-mysql/connection-url
+3. RabbitMQ with name RabbitMQ hosted in AWS owner Data team
