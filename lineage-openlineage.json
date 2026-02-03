@@ -1,0 +1,322 @@
+{
+    "eventType": "COMPLETE",
+    "eventTime": "2026-02-02T00:00:00.000Z",
+    "job": {
+        "namespace": "cobol-banking",
+        "name": "ACCTXFRM",
+        "facets": {
+            "documentation": {
+                "_producer": "https://github.com/OpenLineage/OpenLineage",
+                "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/DocumentationJobFacet.json",
+                "description": "Account Transformation - COBOL program transforming data from CustomerAccounts to AccountTransactions"
+            },
+            "jobType": {
+                "_producer": "https://github.com/OpenLineage/OpenLineage",
+                "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/JobTypeJobFacet.json",
+                "processingType": "BATCH",
+                "integration": "COBOL",
+                "jobType": "TRANSFORMATION"
+            }
+        }
+    },
+    "run": {
+        "runId": "00000000-0000-0000-0000-000000000001",
+        "facets": {}
+    },
+    "inputs": [
+        {
+            "namespace": "poc-mysql",
+            "name": "default.banking.CustomerAccounts",
+            "facets": {
+                "dataSource": {
+                    "_producer": "https://github.com/OpenLineage/OpenLineage",
+                    "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/DataSourceDatasetFacet.json",
+                    "name": "poc-mysql",
+                    "uri": "mysql://poc-mysql/default"
+                },
+                "schema": {
+                    "_producer": "https://github.com/OpenLineage/OpenLineage",
+                    "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/SchemaDatasetFacet.json",
+                    "fields": [
+                        {
+                            "name": "AccountID",
+                            "type": "INTEGER",
+                            "description": "Account identifier"
+                        },
+                        {
+                            "name": "CustomerID",
+                            "type": "INTEGER",
+                            "description": "Customer identifier"
+                        },
+                        {
+                            "name": "AccountNumber",
+                            "type": "STRING",
+                            "description": "Account number"
+                        },
+                        {
+                            "name": "CustomerName",
+                            "type": "STRING",
+                            "description": "Customer name"
+                        },
+                        {
+                            "name": "AccountType",
+                            "type": "STRING",
+                            "description": "Account type"
+                        },
+                        {
+                            "name": "Balance",
+                            "type": "DECIMAL",
+                            "description": "Account balance"
+                        },
+                        {
+                            "name": "BranchCode",
+                            "type": "STRING",
+                            "description": "Branch code"
+                        },
+                        {
+                            "name": "RiskScore",
+                            "type": "INTEGER",
+                            "description": "Risk score"
+                        }
+                    ]
+                }
+            },
+            "inputFacets": {}
+        }
+    ],
+    "outputs": [
+        {
+            "namespace": "poc-mysql",
+            "name": "default.bank.AccountTransactions",
+            "facets": {
+                "dataSource": {
+                    "_producer": "https://github.com/OpenLineage/OpenLineage",
+                    "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/DataSourceDatasetFacet.json",
+                    "name": "poc-mysql",
+                    "uri": "mysql://poc-mysql/default"
+                },
+                "schema": {
+                    "_producer": "https://github.com/OpenLineage/OpenLineage",
+                    "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/SchemaDatasetFacet.json",
+                    "fields": [
+                        {
+                            "name": "AccountID",
+                            "type": "INTEGER",
+                            "description": "Account identifier"
+                        },
+                        {
+                            "name": "CustomerID",
+                            "type": "INTEGER",
+                            "description": "Customer identifier"
+                        },
+                        {
+                            "name": "AccountNumber",
+                            "type": "STRING",
+                            "description": "Account number"
+                        },
+                        {
+                            "name": "Description",
+                            "type": "STRING",
+                            "description": "Transaction description"
+                        },
+                        {
+                            "name": "TransactionSubType",
+                            "type": "STRING",
+                            "description": "Transaction subtype"
+                        },
+                        {
+                            "name": "Amount",
+                            "type": "DECIMAL",
+                            "description": "Transaction amount"
+                        },
+                        {
+                            "name": "RunningBalance",
+                            "type": "DECIMAL",
+                            "description": "Running balance"
+                        },
+                        {
+                            "name": "BranchCode",
+                            "type": "STRING",
+                            "description": "Branch code"
+                        },
+                        {
+                            "name": "ReferenceNumber",
+                            "type": "STRING",
+                            "description": "Reference number"
+                        }
+                    ]
+                },
+                "columnLineage": {
+                    "_producer": "https://github.com/OpenLineage/OpenLineage",
+                    "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/ColumnLineageDatasetFacet.json",
+                    "fields": {
+                        "AccountID": {
+                            "inputFields": [
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.banking.CustomerAccounts",
+                                    "field": "AccountID"
+                                }
+                            ],
+                            "transformationDescription": "Direct mapping from source to target",
+                            "transformationType": "DIRECT"
+                        },
+                        "CustomerID": {
+                            "inputFields": [
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.banking.CustomerAccounts",
+                                    "field": "CustomerID"
+                                }
+                            ],
+                            "transformationDescription": "Direct mapping from source to target",
+                            "transformationType": "DIRECT"
+                        },
+                        "AccountNumber": {
+                            "inputFields": [
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.banking.CustomerAccounts",
+                                    "field": "AccountNumber"
+                                }
+                            ],
+                            "transformationDescription": "Direct mapping from source to target",
+                            "transformationType": "DIRECT"
+                        },
+                        "Description": {
+                            "inputFields": [
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.banking.CustomerAccounts",
+                                    "field": "CustomerName"
+                                }
+                            ],
+                            "transformationDescription": "Transformed: STRING 'Customer: ' + CustomerName + ' - Account Inquiry'",
+                            "transformationType": "TRANSFORMATION"
+                        },
+                        "TransactionSubType": {
+                            "inputFields": [
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.banking.CustomerAccounts",
+                                    "field": "AccountType"
+                                }
+                            ],
+                            "transformationDescription": "Transformed: Checking->CHK-Inquiry, Savings->SAV-Inquiry, Investment->INV-Inquiry, Credit->CRD-Inquiry, Other->GEN-Inquiry",
+                            "transformationType": "TRANSFORMATION"
+                        },
+                        "Amount": {
+                            "inputFields": [
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.banking.CustomerAccounts",
+                                    "field": "Balance"
+                                }
+                            ],
+                            "transformationDescription": "Direct mapping from source to target",
+                            "transformationType": "DIRECT"
+                        },
+                        "RunningBalance": {
+                            "inputFields": [
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.banking.CustomerAccounts",
+                                    "field": "Balance"
+                                }
+                            ],
+                            "transformationDescription": "Direct mapping from source to target",
+                            "transformationType": "DIRECT"
+                        },
+                        "BranchCode": {
+                            "inputFields": [
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.banking.CustomerAccounts",
+                                    "field": "BranchCode"
+                                }
+                            ],
+                            "transformationDescription": "Direct mapping from source to target",
+                            "transformationType": "DIRECT"
+                        },
+                        "ReferenceNumber": {
+                            "inputFields": [
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.banking.CustomerAccounts",
+                                    "field": "RiskScore"
+                                },
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.banking.CustomerAccounts",
+                                    "field": "AccountNumber"
+                                }
+                            ],
+                            "transformationDescription": "Transformed: STRING 'RSK-' + RiskScore + '-' + AccountNumber",
+                            "transformationType": "TRANSFORMATION"
+                        }
+                    }
+                }
+            },
+            "outputFacets": {}
+        },
+        {
+            "namespace": "poc-s3",
+            "name": "om-poc-s3.transactions",
+            "facets": {
+                "dataSource": {
+                    "_producer": "https://github.com/OpenLineage/OpenLineage",
+                    "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/DataSourceDatasetFacet.json",
+                    "name": "poc-s3",
+                    "uri": "s3://om-poc-s3/transactions"
+                },
+                "schema": {
+                    "_producer": "https://github.com/OpenLineage/OpenLineage",
+                    "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/SchemaDatasetFacet.json",
+                    "fields": [
+                        {
+                            "name": "TRANSACTION_ID",
+                            "type": "STRING",
+                            "description": "Transaction identifier"
+                        },
+                        {
+                            "name": "ACCOUNT_ID",
+                            "type": "STRING",
+                            "description": "Account identifier"
+                        }
+                    ]
+                },
+                "columnLineage": {
+                    "_producer": "https://github.com/OpenLineage/OpenLineage",
+                    "_schemaURL": "https://openlineage.io/spec/facets/1-0-0/ColumnLineageDatasetFacet.json",
+                    "fields": {
+                        "TRANSACTION_ID": {
+                            "inputFields": [
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.bank.AccountTransactions",
+                                    "field": "TransactionID"
+                                }
+                            ],
+                            "transformationDescription": "Direct mapping",
+                            "transformationType": "DIRECT"
+                        },
+                        "ACCOUNT_ID": {
+                            "inputFields": [
+                                {
+                                    "namespace": "poc-mysql",
+                                    "name": "default.bank.AccountTransactions",
+                                    "field": "AccountID"
+                                }
+                            ],
+                            "transformationDescription": "Direct mapping",
+                            "transformationType": "DIRECT"
+                        }
+                    }
+                }
+            },
+            "outputFacets": {}
+        }
+    ],
+    "producer": "https://github.com/OpenLineage/OpenLineage/cobol-integration",
+    "schemaURL": "https://openlineage.io/spec/1-0-5/OpenLineage.json#/$defs/RunEvent"
+}
